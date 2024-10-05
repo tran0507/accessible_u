@@ -43,49 +43,51 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-              <a class="nav-link" href="#">Home</a>
-            </li>
+              <a class="nav-link" href="#" aria-current="page">Home</a>
+          </li>
             <li class="nav-item dropdown" tabindex="0" aria-haspopup="true" aria-expanded="false">
               <a class="nav-link dropdown-toggle" href="#"
                   data-toggle="dropdown" aria-controls="dropdownMenu"id="dropdownMenuLink">
                   About
               </a>
-              <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">News</a></li>
-                <li><a class="dropdown-item" href="#">Governance</a></li>
-                <li><a class="dropdown-item" href="#">Diversity</a></li>
-                <li><a class="dropdown-item" href="#">Contact Us</a></li>
-              </ul>
-            </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#"
-                  data-toggle="dropdown">
-                  Academics
-              </a>
-              <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">Degree Programs</a></li>
-                <li><a class="dropdown-item" href="#">AU Faculty</a></li>
-                <li><a class="dropdown-item" href="#">Distance Learning</a></li>
-                <li><a class="dropdown-item" href="#">Libraries</a></li>
-              </ul>
-            </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#"
-                  data-toggle="dropdown">
-                  Admissions
-              </a>
-              <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">Undergraduate</a></li>
-                <li><a class="dropdown-item" href="#">Graduate</a></li>
-                <li><a class="dropdown-item" href="#">Tuition</a></li>
-                <li><a class="dropdown-item" href="#">Financial Aid</a></li>
-              </ul>
-            </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link" href="#">
-                  Visitors
-              </a>
-            </li>
+              <ul class="dropdown-menu" id="dropdownMenu" role="menu">
+                <li role="menuitem"><a class="dropdown-item" href="#">News</a></li>
+                <li role="menuitem"><a class="dropdown-item" href="#">Governance</a></li>
+                <li role="menuitem"><a class="dropdown-item" href="#">Diversity</a></li>
+                <li role="menuitem"><a class="dropdown-item" href="#">Contact Us</a></li>
+            </ul>
+        </li>
+        
+        <li class="nav-item dropdown" tabindex="1" aria-haspopup="true" aria-expanded="false">
+          <a class="nav-link dropdown-toggle" href="#" 
+              data-toggle="dropdown" 
+              aria-controls="academicsDropdown" 
+              id="academicsDropdownLink">
+              Academics
+          </a>
+          <ul class="dropdown-menu" id="academicsDropdown" role="menu">
+              <li role="menuitem"><a class="dropdown-item" href="#">Degree Programs</a></li>
+              <li role="menuitem"><a class="dropdown-item" href="#">AU Faculty</a></li>
+              <li role="menuitem"><a class="dropdown-item" href="#">Distance Learning</a></li>
+              <li role="menuitem"><a class="dropdown-item" href="#">Libraries</a></li>
+          </ul>
+          <li class="nav-item dropdown" tabindex="2" aria-haspopup="true" aria-expanded="false">
+            <a class="nav-link dropdown-toggle" href="#" 
+                data-toggle="dropdown" 
+                aria-controls="admissionsDropdown" 
+                id="admissionsDropdownLink">
+                Admissions
+            </a>
+            <ul class="dropdown-menu" id="admissionsDropdown" role="menu">
+                <li role="menuitem"><a class="dropdown-item" href="#">Undergraduate</a></li>
+                <li role="menuitem"><a class="dropdown-item" href="#">Graduate</a></li>
+                <li role="menuitem"><a class="dropdown-item" href="#">Tuition</a></li>
+                <li role="menuitem"><a class="dropdown-item" href="#">Financial Aid</a></li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" aria-label="Visitors">Visitors</a>
+          </li>
           </ul>
           <form class="form-inline my-2 my-lg-0">
             <input id="search-input" class="form-control mr-sm-2" type="search" placeholder="Search">
@@ -349,6 +351,63 @@
   </div>
 
   <div id="footer" role="bottom" aria-foo="yes"><span>.</div>
-
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const dropdown = document.querySelector('.nav-item.dropdown');
+      const toggle = dropdown.querySelector('.dropdown-toggle');
+      const menu = dropdown.querySelector('.dropdown-menu');
+  
+      toggle.addEventListener('keydown', (event) => {
+          if (event.key === 'Enter' || event.key === ' ') {
+              event.preventDefault();
+              toggleDropdown();
+          }
+      });
+  
+      dropdown.addEventListener('keydown', (event) => {
+          const items = menu.querySelectorAll('.dropdown-item');
+          let index = Array.from(items).indexOf(document.activeElement);
+  
+          if (event.key === 'ArrowDown') {
+              event.preventDefault();
+              if (index < items.length - 1) {
+                  items[index + 1].focus();
+              } else {
+                  items[0].focus(); // Loop to the first item
+              }
+          } else if (event.key === 'ArrowUp') {
+              event.preventDefault();
+              if (index > 0) {
+                  items[index - 1].focus();
+              } else {
+                  items[items.length - 1].focus(); // Loop to the last item
+              }
+          } else if (event.key === 'Escape') {
+              closeDropdown();
+          }
+      });
+  
+      toggle.addEventListener('click', () => {
+          toggleDropdown();
+      });
+  
+      function toggleDropdown() {
+          const expanded = toggle.getAttribute('aria-expanded') === 'true';
+          toggle.setAttribute('aria-expanded', !expanded);
+          menu.classList.toggle('show', !expanded);
+          if (!expanded) {
+              menu.querySelector('.dropdown-item').focus(); // Focus the first item when opening
+          } else {
+              toggle.focus(); // Return focus to toggle when closing
+          }
+      }
+  
+      function closeDropdown() {
+          toggle.setAttribute('aria-expanded', 'false');
+          menu.classList.remove('show');
+          toggle.focus();
+      }
+  });
+  </script>
 </body>
 </html>
