@@ -15,7 +15,7 @@
 	margin-left: 5px;
 }
 .utility-menu li:last-child:before {
-	content: " | "
+	content: " | ";
 }
 
  /*
