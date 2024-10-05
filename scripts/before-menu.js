@@ -38,59 +38,67 @@
 //   }
 // });
 
-    document.addEventListener('DOMContentLoaded', () => {
-      const dropdown = document.querySelector('.nav-item.dropdown');
-      const toggle = dropdown.querySelector('.dropdown-toggle');
-      const menu = dropdown.querySelector('.dropdown-menu');
-  
-      toggle.addEventListener('keydown', (event) => {
-          if (event.key === 'Enter' || event.key === ' ') {
-              event.preventDefault();
-              toggleDropdown();
-          }
-      });
-  
-      dropdown.addEventListener('keydown', (event) => {
-          const items = menu.querySelectorAll('.dropdown-item');
-          let index = Array.from(items).indexOf(document.activeElement);
-  
-          if (event.key === 'ArrowDown') {
-              event.preventDefault();
-              if (index < items.length - 1) {
-                  items[index + 1].focus();
-              } else {
-                  items[0].focus(); // Loop to the first item
-              }
-          } else if (event.key === 'ArrowUp') {
-              event.preventDefault();
-              if (index > 0) {
-                  items[index - 1].focus();
-              } else {
-                  items[items.length - 1].focus(); // Loop to the last item
-              }
-          } else if (event.key === 'Escape') {
-              closeDropdown();
-          }
-      });
-  
-      toggle.addEventListener('click', () => {
-          toggleDropdown();
-      });
-  
-      function toggleDropdown() {
-          const expanded = toggle.getAttribute('aria-expanded') === 'true';
-          toggle.setAttribute('aria-expanded', !expanded);
-          menu.classList.toggle('show', !expanded);
-          if (!expanded) {
-              menu.querySelector('.dropdown-item').focus(); // Focus the first item when opening
-          } else {
-              toggle.focus(); // Return focus to toggle when closing
-          }
-      }
-  
-      function closeDropdown() {
-          toggle.setAttribute('aria-expanded', 'false');
-          menu.classList.remove('show');
-          toggle.focus();
-      }
-  });
+document.addEventListener('DOMContentLoaded', () => {
+    const dropdown = document.querySelector('.nav-item.dropdown');
+    const toggle = dropdown.querySelector('.dropdown-toggle');
+    const menu = dropdown.querySelector('.dropdown-menu');
+
+    toggle.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            toggleDropdown();
+        }
+    });
+
+    dropdown.addEventListener('keydown', (event) => {
+        const items = menu.querySelectorAll('.dropdown-item');
+        let index = Array.from(items).indexOf(document.activeElement);
+
+        if (event.key === 'ArrowDown') {
+            event.preventDefault();
+            if (index < items.length - 1) {
+                items[index + 1].focus();
+            } else {
+                items[0].focus(); // Loop to the first item
+            }
+        } else if (event.key === 'ArrowUp') {
+            event.preventDefault();
+            if (index > 0) {
+                items[index - 1].focus();
+            } else {
+                items[items.length - 1].focus(); // Loop to the last item
+            }
+        } else if (event.key === 'Escape') {
+            closeDropdown();
+        }
+    });
+
+    toggle.addEventListener('click', () => {
+        toggleDropdown();
+    });
+
+    menu.addEventListener('blur', (event) => {
+        // Close the dropdown if the focus leaves the dropdown menu
+        if (!dropdown.contains(document.activeElement)) {
+            closeDropdown();
+        }
+    });
+
+    function toggleDropdown() {
+        const expanded = toggle.getAttribute('aria-expanded') === 'true';
+        toggle.setAttribute('aria-expanded', !expanded);
+        menu.classList.toggle('show', !expanded);
+        if (!expanded) {
+            menu.querySelector('.dropdown-item').focus(); // Focus the first item when opening
+        } else {
+            toggle.focus(); // Return focus to toggle when closing
+        }
+    }
+
+    function closeDropdown() {
+        toggle.setAttribute('aria-expanded', 'false');
+        menu.classList.remove('show');
+        toggle.focus();
+    }
+});
+
